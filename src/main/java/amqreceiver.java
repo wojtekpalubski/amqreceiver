@@ -13,6 +13,8 @@ public class amqreceiver {
         TextMessage msg=(TextMessage)receiver.receive();
         System.out.println("Odebralem: >"+msg.getText()+"< "+msg.getJMSMessageID()+" "+msg.getJMSCorrelationID());
 
+        receiver.close();
+        session.close();
         connection.stop();
     }
 }
