@@ -13,6 +13,12 @@ public class amqreceiver {
         TextMessage msg=(TextMessage)receiver.receive();
         System.out.println("Odebralem: >"+msg.getText()+"< "+msg.getJMSMessageID()+" "+msg.getJMSCorrelationID());
 
+        TextMessage msgResponse=session.createTextMessage("Potwierdzam >"+msg.getText()+"< "+msg.getJMSMessageID()+" "+msg.getJMSCorrelationID());
+        msgResponse.setJMSCorrelationID(msg.getJMSCorrelationID());
+        MessageProducer sender= session.createProducer((Queue)msg.getJMSReplyTo());
+        sender.send(msgResponse);
+
+        sender.close();
         receiver.close();
         session.close();
         connection.stop();
